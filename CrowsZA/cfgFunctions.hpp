@@ -32,6 +32,7 @@ class CrowsZA_addon
 		class deleteAllDeadBodies {};
 
 		class centerZeusViewUnit {};
+		class followCam {};
 
 		class massSurrender {};
 
