@@ -14,7 +14,3 @@ params ["_entity"];
 curatorCamera camSetTarget _entity; 
 curatorCamera camSetRelPos [0,-13,0]; 
 curatorCamera camCommit 0;
-crowsZA_followcam_entity = _entity;
-crowsZA_followcam_camDraw3D = addMissionEventHandler ["Draw3D", {curatorCamera camSetTarget crowsZA_followcam_entity; curatorCamera camSetRelPos [0,-13,0]; curatorCamera camCommit 0;}];
-
-//todo might be enough to just add eventhandler that updates the relative point of the cam, test it out. 
