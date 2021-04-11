@@ -28,7 +28,7 @@ crowsZA_followcam_camDistance = 100;
 crowsZA_followcam_camPitch = 15;
 crowsZA_followcam_camYaw = -45;
 crowsZA_followcam_nightVision = false;
-crowsZA_followcam_helperPos = [0, 0, -1];
+crowsZA_followcam_helperPos = [0, 0, 0];
 crowsZA_followcam_centerUnit = _entity;
 
 //create camera helper
@@ -36,10 +36,10 @@ crowsZA_followcam_camhelp = "Logic" createVehicleLocal [0, 0, 0];
 crowsZA_followcam_camhelp attachTo [crowsZA_followcam_centerUnit, crowsZA_followcam_helperPos];
 
 //create camera
-crowsZA_followcam_cam = "camera" camCreate ASLtoAGL getPosASL crowsZA_followcam_centerUnit;
+crowsZA_followcam_cam = "camera" camCreate ASLtoAGL getPosASLVisual crowsZA_followcam_centerUnit;
 crowsZA_followcam_cam cameraEffect ["internal", "back"];
 crowsZA_followcam_cam camPrepareFocus [-1, -1];
-crowsZA_followcam_cam camPrepareFov 0.35;
+crowsZA_followcam_cam camPrepareFov 0.75;
 crowsZA_followcam_cam camCommitPrepared 0;
 showCinemaBorder false;
 
@@ -87,6 +87,8 @@ crowsZA_event_fnc_handleKeyDown = {
 		camDestroy crowsZA_followcam_cam;
 		crowsZA_followcam_cam = nil;
 
+		//reset zeus camera as it seems to doesn't work otherwise 
+		openCuratorInterface;
 	};
 	
 	if (_key isEqualTo 49) then 
@@ -95,9 +97,6 @@ crowsZA_event_fnc_handleKeyDown = {
 		crowsZA_followcam_nightVision = !crowsZA_followcam_nightVision;
 		camUseNVG crowsZA_followcam_nightVision;
 	};
-
-
-
 
 	//Intercepts the default action, eg. pressing escape won't close the dialog.
 	true; 
@@ -109,7 +108,8 @@ crowsZA_event_fnc_updateCam = {
 	[crowsZA_followcam_camhelp, [crowsZA_followcam_camYaw + 180, -crowsZA_followcam_camPitch, 0]] call BIS_fnc_setObjectRotation;
 	crowsZA_followcam_camhelp attachTo [crowsZA_followcam_centerUnit, crowsZA_followcam_helperPos];
 
-	crowsZA_followcam_cam setPos (crowsZA_followcam_camhelp modelToWorld [0, -crowsZA_followcam_camDistance, 0]);
+	crowsZA_followcam_cam setPos (crowsZA_followcam_camhelp modelToWorldVisual [0, -crowsZA_followcam_camDistance, 0]);
+	//getPosASLVisual crowsZA_followcam_centerUnit;
 	// crowsZA_followcam_cam setPos (visiblePosition crowsZA_followcam_centerUnit modelToWorld [0, -crowsZA_followcam_camDistance, 0]);
 	crowsZA_followcam_cam setVectorDirAndUp [vectorDir crowsZA_followcam_camhelp, vectorUp crowsZA_followcam_camhelp];
 }; 
@@ -121,9 +121,19 @@ crowsZA_followcam_mouseZChanged = findDisplay 312 displayAddEventHandler ["Mouse
 crowsZA_followcam_keyDown = findDisplay 312 displayAddEventHandler ["KeyDown", {_this call crowsZA_event_fnc_handleKeyDown}];
 
 
+// This works quite well without jitter, but it is bound to target direction vector... We want a cam that follows a unit but ignores rotation of the unit.
+//  Want to set initial position relative, and then just keep that orientation, but update the position. Any orientation update happens with the mouse event handler.
+// _cpos = getpos _this; 
+// _cam = "camera" camCreate _cpos; 
+// _cam camSetTarget (driver _this); 
+// _cam camSetRelPos [10, -15, 4]; 
+// _cam cameraEffect ["internal", "BACK"]; 
+// _cam camCommit 0; 
+// _cam attachTo [_this];
 
+//so create camera, at unit position. Set it to the relative position we start with and point at target. Then just update the position, not the direction.
 
-
+//check for changes in target vectorDir/vectorUp, and counteract the rel position? 
 
 
 
