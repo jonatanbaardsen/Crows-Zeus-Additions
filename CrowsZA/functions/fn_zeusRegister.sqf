@@ -56,7 +56,8 @@ private _wait = [player] spawn
 		["Spawn Arsenal",{_this call crowsZA_fnc_spawnArsenal}, "\a3\ui_f\data\logos\a_64_ca.paa"],
 		["Set Colour",{_this call crowsZA_fnc_setColour}, "\CrowsZA\data\paint.paa"],
 		["Capture Player",{_this call crowsZA_fnc_capturePlayer}, "\z\ace\addons\captives\UI\captive_ca.paa"],
-		["Teleport To Squadmember",{_this call crowsZA_fnc_teleportToSquadMember}, "\CrowsZA\data\tp.paa"] //TODO change tp logo to indicate squad 
+		["Teleport To Squadmember",{_this call crowsZA_fnc_teleportToSquadMember}, "\CrowsZA\data\tp.paa"], //TODO change tp logo to indicate squad 
+		["Radius Heal",{_this call crowsZA_fnc_radiusHeal}, "\z\ace\addons\zeus\UI\Icon_Module_Zeus_Heal_ca.paa"]
 	];
 
 	//registering ZEN custom modules
